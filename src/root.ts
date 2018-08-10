@@ -1,3 +1,4 @@
+import * as moment from "moment";
 import fetch from "node-fetch";
 import * as Parser from "rss-parser";
 
@@ -90,6 +91,9 @@ export const rootValue = {
     images.forEach((element, index) => {
       if (!element) { return false; }
       feed.items[index].image = element[0];
+    });
+    feed.items.forEach((element) => {
+      element.pubDate =  moment(new Date(element.pubDate)).fromNow();
     });
     return await feed;
   },
