@@ -1,7 +1,12 @@
 import fetch from "node-fetch";
+import * as Parser from "rss-parser";
+
+const parser = new Parser();
 
 // Base endpoint
 const api = "https://api.magicthegathering.io/v1";
+
+const feedUrl = "https://magic.wizards.com/en/rss/rss.xml";
 
 // Check if we are in production
 const isProduction = false; // process.env.NODE_ENV.trim() === "production";
@@ -66,7 +71,7 @@ export const rootValue = {
     const allSets = await fetch(`${api}/sets`);
     const allSetData = await allSets.json();
 
-    // Sort the sets a -z or by most recent date
+    // Sort the sets a - z or by most recent date
     const sortedSets = allSetData.sets.sort((a, b) => {
       if (!key) { return false; }
       return key.indexOf("date") > -1
@@ -76,5 +81,16 @@ export const rootValue = {
 
     // Return the array in reverse
     return await sortedSets.reverse();
+  },
+
+  getNewsFeed: async (): Promise<any> => {
+    const feed = await parser.parseURL(feedUrl);
+    const regEx = /https?([^"\s]+)"?[^>]*.jpg/;
+    const images = feed.items.map((item) => regEx.exec(item.content));
+    images.forEach((element, index) => {
+      if (!element) { return false; }
+      feed.items[index].image = element[0];
+    });
+    return await feed;
   },
 };

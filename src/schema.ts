@@ -40,9 +40,25 @@ export const schema = buildSchema(`
     totalCards: Int
   }
 
+  type FeedItems {
+    title: String
+    link: String
+    image: String
+    pubDate: String
+    content: String
+    contentSnippet: String
+    categories: [String]
+  }
+
+  type Feed {
+    title: String
+    items: [FeedItems]
+  }
+
   type Query {
     setData(key: String): [Set]
     cardData: [Card]
     cardsBySet(set: String, pageSize: Int, page: Int): CardsBySet
+    getNewsFeed: Feed
   }
 `);
