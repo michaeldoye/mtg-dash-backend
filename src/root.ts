@@ -49,6 +49,9 @@ export const rootValue = {
       });
     }
 
+    // Add selected Property
+    cardData.cards.map((card) => card.isSelected = false);
+
     // Get set data from cards
     const setResponse = await fetch(`${api}/sets/${set}`);
     const setData = await setResponse.json();

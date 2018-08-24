@@ -32,6 +32,7 @@ export const schema = buildSchema(`
     multiverseid: Int
     imageUrl: String
     rulings: [Ruling]
+    isSelected: Boolean
   }
 
   type CardsBySet {
